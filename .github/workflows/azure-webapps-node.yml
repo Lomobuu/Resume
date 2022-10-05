@@ -54,6 +54,31 @@ jobs:
         name: node-app
         path: .
 
+  create-environment:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Checkout code
+      uses: actions/checkout@main
+
+    - name: Log into Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - name: Azure CLI Create resource group  
+      uses: Azure/cli@1.0.4
+      with:
+         inlineScript: az group create -n MyVeryBestResourceGroup -l 'West Europe'
+
+    - name: Deploy Bicep file
+      uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+        resourceGroupName: MyVeryBestResourceGroup
+        template: main.bicep
+        parameters: deploy.parameters.json
+
   deploy:
     permissions:
       contents: none
@@ -68,7 +93,7 @@ jobs:
       uses: actions/download-artifact@v3
       with:
         name: node-app
-
+        
     - name: 'Deploy to Azure WebApp'
       id: deploy-to-webapp 
       uses: azure/webapps-deploy@v2
