@@ -71,6 +71,6 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 # Create service principal
 
-az ad sp create-for-rbac --name 'GitHubActionsPrincipal' --role contributor --scopes /subscriptions/{SUBID}
+az ad sp create-for-rbac --name 'GitHubActionsPrincipal' --role contributor --scopes /subscriptions/{SUBID} --sdk-auth
 
-then add output to secret as AZURE_CREDENTIAL
+then add output to secret as AZURE_CREDENTIAL in Github repo secret.
