@@ -69,4 +69,8 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
-# Test
+# Create service principal
+
+az ad sp create-for-rbac --name 'GitHubActionsPrincipal' --role contributor --scopes /subscriptions/{SUBID}
+
+then add output to secret as AZURE_CREDENTIAL
