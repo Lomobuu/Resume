@@ -55,6 +55,7 @@ jobs:
 
   create-environment:
     runs-on: ubuntu-latest
+    needs: build
     steps:
 
     - name: Checkout code
@@ -75,13 +76,13 @@ jobs:
       with:
         subscriptionId: 776c7557-6b68-48a7-8cae-b58457695823
         resourceGroupName: resumeRG
-        template: main.bicep
+        template: 'Deployment/main.bicep'
 
   deploy:
     permissions:
       contents: none
     runs-on: ubuntu-latest
-    needs: build
+    needs: create-environment
     environment:
       name: 'Development'
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
