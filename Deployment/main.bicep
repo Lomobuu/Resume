@@ -1,5 +1,5 @@
 param webAppName string = 'fozzen-resume-app' // Generate unique String for web app name
-param sku string = 'F1' // The SKU of App Service Plan
+param sku string = 'B1' // The SKU of App Service Plan
 param linuxFxVersion string = 'node|14-lts' // The runtime stack of web app
 param location string = resourceGroup().location // Location for all resources
 var appServicePlanName = toLower('AppServicePlan-${webAppName}')
