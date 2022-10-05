@@ -6,7 +6,8 @@ import Particles from "react-tsparticles";
 import { loadFull } from "tsparticles";
 import React from 'react';
 import { SocialIcon } from 'react-social-icons';
-
+import { FaAngular,FaBootstrap,FaGitAlt,FaJsSquare,FaNodeJs,FaReact, FaCss3Alt, FaHtml5 } from "react-icons/fa";
+import { SiAzuredevops, SiAzurepipelines, SiGithubactions, SiMicrosoftazure, SiTerraform, SiPowershell, SiMicrosoftsharepoint, SiCplusplus, SiMicrosoftoffice } from "react-icons/si";
 
 function App() {
   const particlesInit = async (main) => {
@@ -22,11 +23,10 @@ function App() {
     console.log(container);
   };
 
-  window.onload = function () { setInterval(function() {
+    setInterval(function() {
     var time = (new Date() - new Date(946508601000)) / (1000 * 60 * 60 * 24 * 365.25); // milliseconds per year
     document.getElementById("Age").innerHTML = (time).toFixed(7);
   }, 500);
-}
 
   return (
     
@@ -135,11 +135,12 @@ function App() {
       </div>
 
 
-        <section id="Skills">
+        <section>
         <div class="container">
             <div class="row text-dark justify-content-md-center text-center">
-              <div class="col col-lg-6 border rounded bg-light opacity-75">
+              <div class="col col-lg-7 border rounded bg-light opacity-75 mt-2" id="About">
                 <h1>ABOUT ME</h1>
+                <hr></hr>
                 <p>
                 Hi! Im Simen Fossen, a <span id="Age"></span> year-old DevOps Engineer
                 </p>
@@ -147,21 +148,56 @@ function App() {
                  currently living in Stavanger, Norway.
                 </p> 
                 <p>
-                I am a programmer with beginner knowledge of front-end & back-end techniques. 
-                My web apps, such as this one, are projects for me to learn more frontend and backend, while using DevOps tools such as CI/CD to automate.
-
+                I am a developer with beginner knowledge of front-end & back-end techniques. 
+                My web apps, such as this one, are projects for me to learn more frontend and backend, while still advancing my primary proffession: <b>DevOps</b> 
                 </p>
-              </div>
-              <div class="col col-lg-6 border rounded bg-light opacity-75">
-                <h1>Skills</h1>
-
                 <p>
-                I am a programmer with beginner knowledge of front-end & back-end techniques. 
-                My web apps, such as this one, are projects for me to learn more frontend and backend, while using DevOps tools such as CI/CD to automate.
+                By using tools such as CI/CD to automate hosting and further development of the web apps.
 
                 </p>
               </div>
-              
+              <div class="col col-lg-7 border rounded bg-light opacity-75 mt-5 pb-5" id="Skills">
+                <h1>Skills</h1>
+                <hr></hr>
+                <h2>Programming Languages & Frameworks</h2>
+                <hr></hr>
+                <FaHtml5 size={100}/><FaCss3Alt size={100}/><FaJsSquare size={100}/><SiCplusplus size={100}/>
+                <br></br>
+                <FaAngular size={100}/><FaReact size={100}/><FaBootstrap size={100}/><FaNodeJs size={100}/><FaGitAlt size={100}/>
+                <hr></hr>
+                <h2>Key Competance</h2>
+                <hr></hr>
+                <h3>Azure Cloud Platform & Microsoft Office</h3>
+                <SiMicrosoftazure size={100}/><SiAzuredevops size={100}/><SiPowershell size={100}/><SiMicrosoftoffice size={100}/><SiMicrosoftsharepoint size={100}/>
+                <br></br>
+                <h3>DevOps</h3>
+                <SiMicrosoftazure size={100}/><SiTerraform size={100}/><SiGithubactions size={100}/><SiAzurepipelines size={100}/>
+                <h3>Primary Skills</h3>
+                <p>Communication</p>
+                <div class="progress">
+                  <div class="progress-bar w-100" role="progressbar"  aria-valuenow="85" aria-valuemin="0" aria-valuemax="100">
+                  </div>
+                </div>
+                <p>Teamwork</p>
+                <div class="progress">
+                  <div class="progress-bar w-100" role="progressbar" aria-valuenow="95" aria-valuemin="0" aria-valuemax="100" >
+                  </div>
+                </div>
+                <p>Creative</p>
+                <div class="progress">
+                  <div class="progress-bar w-75" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" >
+                  </div>
+                </div>
+                <p>Leadership</p>
+                <div class="progress">
+                  <div class="progress-bar w-75" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" >
+                  </div>
+                </div>
+              </div>
+              <div class="col col-lg-7 border rounded bg-light opacity-75 mt-5" id="Contact">
+              <h1>Contact ME!</h1>
+              <p>Email: <b>simen.fossen@lyse.net</b></p>
+              </div>
             </div>
         </div>
         </section>
