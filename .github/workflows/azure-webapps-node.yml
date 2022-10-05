@@ -73,7 +73,7 @@ jobs:
     - name: Deploy Bicep file
       uses: azure/arm-deploy@v1
       with:
-        subscriptionId: ${{ secrets.AZURE_SUBSCRIPTION }}
+        subscriptionId: 776c7557-6b68-48a7-8cae-b58457695823
         resourceGroupName: resumeRG
         template: main.bicep
 
