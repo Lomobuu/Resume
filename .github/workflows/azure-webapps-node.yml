@@ -6,27 +6,49 @@ on:
       - main
 
 jobs:
+  infra:
+    name: infra
+    runs-on: ubuntu-latest
+  
+    steps:
+    - name: Log into Azure
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Azure CLI Create resource group  
+      uses: Azure/cli@1.0.4
+      with:
+         inlineScript: az group create -n resumeRG -l 'West Europe'
+
+    - name: Deploy Bicep file
+      uses: azure/arm-deploy@v1
+      with:
+        subscriptionId: 776c7557-6b68-48a7-8cae-b58457695823
+        resourceGroupName: resumeRG
+        template: 'Deployment/main.bicep'
+
+
   build:
     name: Build
     runs-on: ubuntu-latest
-    
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-    
-    - name: Install Node.js
-      uses: actions/setup-node@v1
+    needs: infra
+
+    - uses: actions/checkout@v3
+
+    - name: Set up Node.js
+      uses: actions/setup-node@v3
       with:
         node-version: 16.x
-    
-    - name: Install NPM packages
-      run: npm ci
-    
-    - name: Build project
-      run: npm run build
+        cache: 'npm'
 
-    - name: Upload production-ready build files
-      uses: actions/upload-artifact@v2
+    - name: npm install, build, and test
+      run: |
+        npm install
+        npm run build
+
+    - name: Upload artifact for deployment job
+      uses: actions/upload-artifact@v3
       with:
         name: drop
         path: ./build
@@ -58,7 +80,3 @@ jobs:
             az storage blob delete-batch --account-name resumestrgacc --source '$web'
 
             az storage blob upload-batch --account-name resumestrgacc -d '$web' -s ./drop
-    
-    - name: Azure logout
-      run: |
-            az logout
