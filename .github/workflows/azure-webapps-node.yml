@@ -87,8 +87,8 @@ jobs:
 
             az group create -n resumeRG -l 'West Europe'
 
-            az storage blob service-properties update --account-name resumestrgacc --auth-mode key --static-website --index-document index.html
+            az storage blob service-properties update --account-name resumestrgacc --auth-mode login --static-website --index-document index.html
 
-            az storage blob delete-batch --account-name resumestrgacc --auth-mode key --source '$web'
+            az storage blob delete-batch --account-name resumestrgacc --auth-mode login --source '$web'
 
-            az storage blob upload-batch --account-name resumestrgacc --auth-mode key -d '$web' -s ./drop
+            az storage blob upload-batch --account-name resumestrgacc --auth-mode login -d '$web' -s ./drop
