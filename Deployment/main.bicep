@@ -1,48 +1,16 @@
-// infra.bicep
-@description('The SKU of App Service Plan')
-param planSku string = 'B1'
-
-@maxLength(8)
-@description('Name of environment')
-param env string = 'webapp'
-
-@description('Resource tags object to use')
-param resourceTag object = {
-  Environment: env
-  Application: 'Webapp'
-}
+@description('Location for all resources.')
 param location string = resourceGroup().location
 
-var webAppName = 'app-webapp-${env}-${uniqueString(resourceGroup().id)}'
-var planName = 'plan-webapp-${env}-${uniqueString(resourceGroup().id)}'
+var storageAccountName = 'fozzenstrgacc'
 
-resource appplan 'Microsoft.Web/serverfarms@2020-12-01' = {
-  name: planName
+resource storageAccount 'Microsoft.Storage/storageAccounts@2021-01-01' = {
+  name: storageAccountName
   location: location
-  kind: 'linux'
+  tags: {
+    displayName: storageAccountName
+  }
+  kind: 'StorageV2'
   sku: {
-    name: planSku
-  }
-  properties: {
-    reserved: true
+    name: 'Standard_LRS'
   }
 }
-
-resource webapp 'Microsoft.Web/sites@2020-12-01' = {
-  name: webAppName
-  location: location
-  tags: resourceTag
-  kind: 'app,linux'
-  properties: {
-    serverFarmId: appplan.id
-    httpsOnly: true
-    clientAffinityEnabled: false
-    siteConfig: {
-      linuxFxVersion: 'NODE|14-lts'
-      alwaysOn: true
-    }
-  }
-}
-
-output webAppName string = webAppName
-output webAppEndpoint string = webapp.properties.defaultHostName

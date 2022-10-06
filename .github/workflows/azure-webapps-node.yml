@@ -1,67 +1,64 @@
-#deploy.yaml
-name: CI
+name: Build site
 
 on:
   push:
-
-env:
-  RESOURCE_GROUP_NAME: resumeRG
-  RESOURCE_GROUP_LOCATION: westeurope
-  ENV_NAME: devd4
+    branches:
+      - main
 
 jobs:
-  deploy-infra:
+  build:
+    name: Build
     runs-on: ubuntu-latest
-    # The output can be read from other jobs that depend on this one
-    outputs:
-      webAppName: ${{ steps.infra.outputs.webAppName }}
+    
     steps:
-      - uses: actions/checkout@v2
+    - name: Checkout code
+      uses: actions/checkout@v2
+    
+    - name: Install Node.js
+      uses: actions/setup-node@v1
+      with:
+        node-version: 16.x
+    
+    - name: Install NPM packages
+      run: npm ci
+    
+    - name: Build project
+      run: npm run build
 
-      - name: Azure Login
-        uses: Azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+    - name: Upload production-ready build files
+      uses: actions/upload-artifact@v2
+      with:
+        name: drop
+        path: ./build
 
-      - name: Create ResourceGroup
-        run: >
-          az group create
-          -l ${{ env.RESOURCE_GROUP_LOCATION }}
-          -n ${{ env.RESOURCE_GROUP_NAME }}
-
-      - uses: azure/arm-deploy@v1
-        id: infra
-        with:
-          resourceGroupName: ${{ env.RESOURCE_GROUP_NAME }}
-          template: 'Deployment/main.bicep'
-          parameters: env=${{ env.ENV_NAME }}
-
-      - name: Print WebApp endpoint
-        run: echo https://${{ steps.infra.outputs.webAppEndpoint }}
-
-  deploy-webapp:
-    needs: [deploy-infra]
+  deploy:
+    name: Deploy
     runs-on: ubuntu-latest
-
+    needs: build
+    
     steps:
-      - uses: actions/checkout@v2
-
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v2.2.0
-        with:
-          node-version: 12.x
-
-      - name: Npm install
-        run: npm ci
-
-      - name: Azure Login
-        uses: Azure/login@v1
-        with:
+    - name: Download artifact from build job
+      uses: actions/download-artifact@v2
+      with:
+        name: drop
+    
+    - name: Azure login
+      uses: azure/login@v1
+      with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
+    
+    - name: Upload to Azure blob storage
+      uses: azure/CLI@v1
+      with:
+        inlineScript: |
+            az group create -n resumeRG -l 'West Europe'
 
-      - name: Deploy Azure WebApp
-        uses: Azure/webapps-deploy@v2
-        with:
-          # We reference the webAppName output of the deploy-infra job
-          app-name: ${{ needs.deploy-infra.outputs.webAppName }}
-          startup-command: npm start
+            az storage blob service-properties update --account-name resumestrgacc --static-website --index-document index.html
+
+            az storage blob delete-batch --account-name resumestrgacc --source '$web'
+
+            az storage blob upload-batch --account-name resumestrgacc -d '$web' -s ./drop
+    
+    - name: Azure logout
+      run: |
+            az logout
