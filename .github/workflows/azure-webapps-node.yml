@@ -89,4 +89,4 @@ jobs:
 
             az storage blob service-properties update --account-name resumestrgacc --auth-mode login --static-website --index-document index.html
 
-            az storage blob upload-batch --account-name resumestrgacc --auth-mode login -d '$web' -s ./drop
+            az storage blob upload-batch --account-name resumestrgacc --auth-mode login -d '$web' -s drop
