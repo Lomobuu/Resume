@@ -84,7 +84,7 @@ jobs:
       with:
         azcliversion: 2.30.0
         inlineScript: |
-            Conn = $(az storage account show-connection-string --name resumestrgacc --resource-group resumeRG --subscription MainSubscription )
+            $Conn=$(az storage account show-connection-string --name resumestrgacc --resource-group resumeRG --subscription MainSubscription)
 
             az group create -n resumeRG -l 'West Europe'
 
