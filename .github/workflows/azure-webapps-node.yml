@@ -78,27 +78,18 @@ jobs:
       uses: azure/login@v1
       with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
-
-
-    - name: Azure CLI script
+    
+    - name: Upload to Azure blob storage
       uses: azure/CLI@v1
       with:
         azcliversion: 2.30.0
         inlineScript: |
-          az account show
-          az storage -h
-    
-    # - name: Upload to Azure blob storage
-    #   uses: azure/CLI@v1
-    #   with:
-    #     azcliversion: 2.0.72
-    #     inlineScript: |
-    #         $Conn = (az storage account show-connection-string --name resumestrgacc --resource-group resumeRG --subscription MainSubscription )
+            Conn = $(az storage account show-connection-string --name resumestrgacc --resource-group resumeRG --subscription MainSubscription )
 
-    #         az group create -n resumeRG -l 'West Europe'
+            az group create -n resumeRG -l 'West Europe'
 
-    #         az storage blob service-properties update --account-name resumestrgacc --connection-string $Conn --static-website --index-document index.html
+            az storage blob service-properties update --account-name resumestrgacc --connection-string $Conn --static-website --index-document index.html
 
-    #         az storage blob delete-batch --account-name resumestrgacc --connection-string $Conn --source '$web'
+            az storage blob delete-batch --account-name resumestrgacc --connection-string $Conn --source '$web'
 
-    #         az storage blob upload-batch --account-name resumestrgacc --connection-string $Conn -d '$web' -s ./drop
+            az storage blob upload-batch --account-name resumestrgacc --connection-string $Conn -d '$web' -s ./drop
