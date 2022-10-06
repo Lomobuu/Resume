@@ -82,7 +82,7 @@ jobs:
     - name: Upload to Azure blob storage
       uses: azure/CLI@v1
       with:
-        azcliversion: 2.30.0
+        azcliversion: 2.0.72
         inlineScript: |
             $Conn = (az storage account show-connection-string --name resumestrgacc --resource-group resumeRG --subscription MainSubscription )
 
