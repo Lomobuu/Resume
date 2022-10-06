@@ -1,7 +1,7 @@
 @description('Location for all resources.')
 param location string = resourceGroup().location
 
-var storageAccountName = 'fozzenstrgacc'
+var storageAccountName = 'resumestrgacc'
 
 resource storageAccount 'Microsoft.Storage/storageAccounts@2021-01-01' = {
   name: storageAccountName
