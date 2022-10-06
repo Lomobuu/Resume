@@ -1,31 +1,48 @@
-param webAppName string = 'fozzen-resume-app' // Generate unique String for web app name
-param sku string = 'B1' // The SKU of App Service Plan
-param linuxFxVersion string = 'node|14-lts' // The runtime stack of web app
-param location string = resourceGroup().location // Location for all resources
-var appServicePlanName = toLower('AppServicePlan-${webAppName}')
-var webSiteName = toLower('wapp-${webAppName}')
+// infra.bicep
+@description('The SKU of App Service Plan')
+param planSku string = 'B1'
 
-resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
-  name: appServicePlanName
+@maxLength(8)
+@description('Name of environment')
+param env string = 'webapp'
+
+@description('Resource tags object to use')
+param resourceTag object = {
+  Environment: env
+  Application: 'Webapp'
+}
+param location string = resourceGroup().location
+
+var webAppName = 'app-webapp-${env}-${uniqueString(resourceGroup().id)}'
+var planName = 'plan-webapp-${env}-${uniqueString(resourceGroup().id)}'
+
+resource appplan 'Microsoft.Web/serverfarms@2020-12-01' = {
+  name: planName
   location: location
+  kind: 'linux'
+  sku: {
+    name: planSku
+  }
   properties: {
     reserved: true
   }
-  sku: {
-    name: sku
-  }
-  kind: 'linux'
 }
-resource appService 'Microsoft.Web/sites@2020-06-01' = {
-  name: webSiteName
+
+resource webapp 'Microsoft.Web/sites@2020-12-01' = {
+  name: webAppName
   location: location
+  tags: resourceTag
+  kind: 'app,linux'
   properties: {
-    serverFarmId: appServicePlan.id
-    clientAffinityEnabled: false
+    serverFarmId: appplan.id
     httpsOnly: true
+    clientAffinityEnabled: false
     siteConfig: {
-      linuxFxVersion: linuxFxVersion
+      linuxFxVersion: 'NODE|14-lts'
       alwaysOn: true
     }
   }
 }
+
+output webAppName string = webAppName
+output webAppEndpoint string = webapp.properties.defaultHostName
