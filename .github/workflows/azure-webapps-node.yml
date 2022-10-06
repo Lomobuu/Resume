@@ -44,11 +44,14 @@ jobs:
         npm install
         npm run build --if-present
 
+    - name: Zip all files for upload between jobs
+      run: zip react.zip ./* 
+
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v3
       with:
         name: node-app
-        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        path: react.zip
 
   create-environment:
     runs-on: ubuntu-latest
@@ -80,10 +83,9 @@ jobs:
     needs: create-environment
     steps:
     - name: Download artifact from build job
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v2
       with:
         name: node-app
-        path: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
 
         
     - name: Log into Azure
@@ -96,5 +98,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        package: ${{ env.AZURE_WEBAPP_PACKAGE_PATH }}
+        package: react.zip
         startup-command: npm start
