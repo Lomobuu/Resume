@@ -42,17 +42,13 @@ jobs:
     - name: npm install, build, and test
       run: |
         npm install
-        npm run build --if-present
-
-    - name: Zip artifact for deployment
-      run: |
-          zip react.zip ./* -r
+        npm run build
 
     - name: Upload artifact for deployment job
       uses: actions/upload-artifact@v3
       with:
-        name: node-app
-        path: react.zip
+        name: drop
+        path: build
 
   create-environment:
     runs-on: ubuntu-latest
@@ -86,7 +82,7 @@ jobs:
     - name: Download artifact from build job
       uses: actions/download-artifact@v2
       with:
-        name: node-app
+        name: drop
 
         
     - name: Log into Azure
@@ -99,5 +95,5 @@ jobs:
       uses: azure/webapps-deploy@v2
       with:
         app-name: ${{ env.AZURE_WEBAPP_NAME }}
-        package: react.zip
+        package: build
         startup-command: npm start
