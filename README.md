@@ -2,6 +2,9 @@
 
 Live site on GH Pages: https://lomobuu.github.io/Resume/
 
+pm2 serve /home/site/wwwroot --no-daemon --spa 
+STARTUP COMMAND.
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
