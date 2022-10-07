@@ -1,5 +1,7 @@
 # Getting Started with Create React App
 
+Live site on GH Pages: https://lomobuu.github.io/Resume/
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts

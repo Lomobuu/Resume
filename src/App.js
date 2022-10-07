@@ -103,7 +103,7 @@ function App() {
 
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
           <div class="container-fluid">
-            <a class="navbar-brand" href="#">Simen Fossen</a>
+            <p class="navbar-brand">Simen Fossen</p>
           </div>
           <ul class="navbar-nav">
           <li class="nav-item">
@@ -195,7 +195,7 @@ function App() {
                 </div>
               </div>
               <div class="col col-lg-7 border rounded bg-light opacity-75 mt-5" id="Contact">
-              <h1>Contact ME!</h1>
+              <h1>Contact ME :D</h1>
               <p>Email: <b>simen.fossen@lyse.net</b></p>
               </div>
             </div>
