@@ -195,7 +195,7 @@ function App() {
                 </div>
               </div>
               <div class="col col-lg-7 border rounded bg-light opacity-75 mt-5" id="Contact">
-              <h1>Contact ME :D</h1>
+              <h1>Contact ME :D test</h1>
               <p>Email: <b>simen.fossen@lyse.net</b></p>
               </div>
             </div>
