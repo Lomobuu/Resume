@@ -1,16 +1,27 @@
-@description('Location for all resources.')
-param location string = resourceGroup().location
-
-var storageAccountName = 'resumestrgacc'
-
-resource storageAccount 'Microsoft.Storage/storageAccounts@2021-01-01' = {
-  name: storageAccountName
+param webAppName string = 'fozzen-resume-app' // Generate unique String for web app name
+param sku string = 'B1' // The SKU of App Service Plan
+param linuxFxVersion string = 'node|16-lts' // The runtime stack of web app
+param location string = resourceGroup().location // Location for all resources
+var appServicePlanName = toLower('AppServicePlan-${webAppName}')
+var webSiteName = toLower('wapp-${webAppName}')
+resource appServicePlan 'Microsoft.Web/serverfarms@2020-06-01' = {
+  name: appServicePlanName
   location: location
-  tags: {
-    displayName: storageAccountName
+  properties: {
+    reserved: true
   }
-  kind: 'StorageV2'
   sku: {
-    name: 'Standard_LRS'
+    name: sku
+  }
+  kind: 'linux'
+}
+resource appService 'Microsoft.Web/sites@2020-06-01' = {
+  name: webSiteName
+  location: location
+  properties: {
+    serverFarmId: appServicePlan.id
+    siteConfig: {
+      linuxFxVersion: linuxFxVersion
+    }
   }
 }
